@@ -1,0 +1,16 @@
+! Nested repeat-until demonstration
+
+let
+  var i : Integer <- 0
+  var j : Integer <- 0
+in
+  repeat
+    i := i + 1;
+    j := 0;
+    repeat
+      j := j + 1;
+      putint(i);
+      putint(j);
+      puteol
+    until j = 3
+  until i = 2

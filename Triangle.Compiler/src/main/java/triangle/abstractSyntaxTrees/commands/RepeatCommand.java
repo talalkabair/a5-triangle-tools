@@ -1,3 +1,16 @@
+/*
+ * RepeatCommand.java
+ *
+ * Implements the 'repeat ... until <expression>' loop.
+ * The body executes at least once before the condition is checked.
+ *
+ * Syntax example:
+ *   repeat
+ *     <command-sequence>
+ *   until <boolean-expression>
+ */
+
+
 package triangle.abstractSyntaxTrees.commands;
 
 import triangle.abstractSyntaxTrees.expressions.Expression;
