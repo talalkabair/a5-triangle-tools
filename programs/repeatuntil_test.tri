@@ -1,0 +1,9 @@
+! Test repeat-until loop feature
+let
+  var counter : Integer <- 0
+in
+  repeat
+    counter := counter + 1;
+    putint(counter);
+    puteol
+  until counter = 5
