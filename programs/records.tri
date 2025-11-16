@@ -1,0 +1,24 @@
+! test program record.Æ
+let
+  type Month ~ array 3 of Char;
+  type Date ~ record d: Integer, m: Month end;
+  const xmas ~ {d ~ 25,
+                m ~ ['D','e','c']};
+  var eve: Date;
+
+  proc putmonth (mth: Month) ~
+    begin
+    put (mth[0]); put (mth[1]); put (mth[2])
+    end;
+
+  proc putdate (date: Date) ~
+    begin
+    putint (date.d); put ('/'); putmonth (date.m)
+    end
+
+in
+  begin
+  putdate (xmas); puteol ();
+  eve := {d ~ xmas.d-1, m ~ xmas.m};
+  putdate (eve); puteol ()
+  end

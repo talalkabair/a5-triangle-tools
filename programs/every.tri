@@ -1,0 +1,148 @@
+! Marry a woman and man.
+! Input following data for each person (woman then man):
+!     surname, forename (each up to 10 non-blank chars),
+!     sex ('M'|'F'), marital status ('m'|'u'),
+!     day, month, year of birth.
+
+let
+	type Month ~ Integer;
+	const Jan ~ 1;	const Feb ~ 2;	const Mar ~ 3;
+	const Apr ~ 4;	const May ~ 5;	const Jun ~ 6;
+	const Jul ~ 7;	const Aug ~ 8;	const Sep ~ 9;
+	const Oct ~ 10;	const Nov ~ 11;	const Dec ~ 12;
+
+	type Date ~ record
+              y : Integer,
+              m : Month,
+              d : Integer
+             end;
+	const today ~ {y ~ 1993, m ~ Apr, d ~ 1};
+
+	proc getdate (var date : Date) ~
+		begin
+		getint (var date.d); getint (var date.m); getint (var date.y)
+		end;
+
+	proc putdate (date : Date) ~
+		begin
+		putint (date.d); put ('/');
+		putint (date.m); put ('/');
+		putint (date.y // 100)
+		end;
+
+	func yearsbefore (yrs : Integer, date : Date) : Date ~
+		{y ~ date.y - yrs, m ~ date.m, d ~ date.d};
+
+	func earlier (date1 : Date, date2 : Date) : Boolean ~
+		if date1.y < date2.y then true
+		else if date1.y > date2.y then false
+		else if date1.m < date2.m then true
+		else if date1.m > date2.m then false
+		else date1.d < date2.d;
+
+	const maxname ~ 10;
+	type Name ~ array 10 of Char;
+
+	proc getname (var name : Name) ~
+		let
+			var ch : Char;
+			var length : Integer
+		in
+			begin
+			get (var ch); while ch = ' ' do get (var ch);
+			length := 0;
+			while length < maxname do
+				begin
+				length := length + 1; name[length] := ch;
+				if ch \= ' ' then get (var ch) else ! skip
+				end
+			end;
+
+	proc putname (name : Name) ~
+		let
+			var pad : Boolean;
+			var length : Integer
+		in
+			begin
+			pad := false; length := 0;
+			while (\ pad) /\ (length < maxname) do
+				begin
+				length := length + 1;
+				if name[length] = ' ' then
+					pad := true
+				else
+					put (name[length])
+				end
+			end;
+
+	type Person ~ record
+	                surname  : Name,
+	                forename : Name,
+	                male     : Boolean,
+	                married  : Boolean,
+	                dob      : Date
+	              end;
+
+	proc getperson (var person : Person) ~
+		let
+			var fore : Name;
+			var sur  : Name;
+			var s : Char;
+			var m : Char;
+			var birth : Date
+		in
+			begin
+			getname (var sur); getname (var fore);
+			get (var s); while s = ' ' do get (var s);
+			get (var m); while m = ' ' do get (var m);
+			getdate (var birth);
+			person := {surname ~ sur, forename ~ fore,
+			           male ~ (s = 'M'), married ~ (m = 'm'), 
+			           dob ~ birth}
+			end;
+
+	proc putperson (person : Person) ~
+		begin
+		putname (person.surname); put (' ');
+		putname (person.forename); put (' ');
+		put (if person.male then 'M' else 'F'); put (' ');
+		put (if person.married then 'm' else 'u'); put (' ');
+		putdate (person.dob)
+		end;
+
+	func age (person : Person) : Integer ~
+		let
+			const dob ~ person.dob
+		in
+			if (today.m > dob.m) \/
+			   ((today.m = dob.m) /\ (today.d >= dob.d))
+			then today.y - dob.y
+			else today.y - dob.y - 1;
+
+	const latestdob ~ yearsbefore (16, today);
+
+	var bride : Person;
+	var groom : Person
+
+in
+	begin
+	getperson (var bride);
+	getperson (var groom);
+	puteol ();
+	if \ bride.male /\ groom.male /\
+	   \ (bride.married \/ groom.married) /\
+	   \ earlier (latestdob, bride.dob) /\
+	   \ earlier (latestdob, groom.dob) then
+		begin
+		put ('O'); put ('K'); puteol ();
+		bride.married := true; groom.married := true;
+		bride.surname := groom.surname
+		end
+	else
+		begin
+		put ('N'); put ('o'); put ('!'); puteol ()
+		end;
+	putperson (bride); put (' '); putint (age (bride)); puteol ();
+	putperson (groom); put (' '); putint (age (groom)); puteol ();
+	putdate (today);  puteol ()
+	end

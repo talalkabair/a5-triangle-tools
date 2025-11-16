@@ -1,0 +1,20 @@
+apply plugin: 'java'
+
+java {
+    sourceCompatibility = 21
+}
+
+subprojects.each { subproject ->
+  evaluationDependsOn(subproject.path)
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+
+  from subprojects.sourceSets.main.output
+}

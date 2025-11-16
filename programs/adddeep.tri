@@ -1,0 +1,12 @@
+let
+    var a: Integer
+in
+begin
+    a := 10 + 20 * 2 / 3;
+    putint(a);
+   
+   	puteol();
+    
+    a := 5 + 8;
+    putint(a)
+end

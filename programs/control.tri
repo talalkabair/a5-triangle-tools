@@ -1,0 +1,26 @@
+! Plot a histogram from a stream of nonzero integers.
+
+let
+ const mark ~ '+';
+	var n : Integer
+in
+	begin
+	getint (var n); geteol ();
+	while n \= 0 do
+  let
+   var i : Integer;
+   var gap : Integer
+  in
+		 begin
+		 gap := if n > 0 then 20 else 20 + n;
+		 if n < 0 then  n := 0 - n else ;
+	 	i := 0;
+		 while i < gap do
+		 	begin put (' '); i := i + 1 end;
+		 i := 0;
+		 while i < n do
+		 	begin put (mark); i := i + 1 end;
+		 puteol ();
+	 	getint (var n); geteol ()
+   end
+	end

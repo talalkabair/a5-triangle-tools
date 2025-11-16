@@ -1,0 +1,52 @@
+let
+ type Name   ~ array 6 of Char;
+ type Number ~ Integer;
+
+ proc getname (var newname: Name) ~
+  let var i: Integer
+  in
+   begin
+   i := 0;
+   while i < 6 do
+    begin
+     if eol () then
+      newname[i] := ' '
+     else
+      get (var newname[i]);
+     i := i+1
+    end
+   end;
+
+ proc putname (newname: Name) ~
+  let var i: Integer
+  in
+   begin
+   i := 0;
+   while i < 6 do
+    begin
+     put (newname[i]);
+     i := i+1
+    end
+   end;
+
+ func samename (name1: Name, name2: Name) : Boolean ~
+  let
+   func same (n: Integer) : Boolean ~
+    (name1[n] = name2[n]) /\
+     (if n = 0 then true else same (n-1))
+  in
+   same (5);
+
+ var nam: Name
+
+in
+
+ begin
+  getname (var nam); geteol ();
+  putname (nam); put (' ');
+  if samename (nam, ['D','a','v','i','d',' ']) then
+   put ('Y')
+  else
+   put ('N');
+  puteol ()
+ end

@@ -1,0 +1,15 @@
+let
+ func factorial (n: Integer): Integer ~
+  if n <= 1
+  then 1
+  else n * factorial (n-1);
+
+ var i: Integer
+
+in
+ begin
+ getint (var i);
+ putint (i); put ('!');
+ put (' '); put ('='); put (' ');
+ putint (factorial (i))
+ end

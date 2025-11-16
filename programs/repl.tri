@@ -1,0 +1,13 @@
+let
+  type Str ~ array 10 of Char;
+
+  func replicate (c: Char): Str ~
+    [c,c,c,c,c,c,c,c,c,c];
+
+  var s: Str
+in
+
+  begin
+  s := replicate('*');
+  put (s[0]); put(s[9]); puteol()
+  end

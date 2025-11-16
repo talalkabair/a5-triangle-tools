@@ -1,0 +1,14 @@
+! this won't work until after some lab work
+
+let
+  var a : Integer
+in
+begin
+  a := 0;
+  repeat
+  begin
+    put('a');
+    a := a + 1;
+  end
+  until a >= 5
+end

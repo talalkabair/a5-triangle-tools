@@ -1,0 +1,31 @@
+! Plot a histogram from a stream of nonzero integers.
+
+let
+	const mid ~ 40;
+	var n : Integer;
+
+	proc putmany (c : Char, n : Integer) ~
+		let
+			var i : Integer
+		in
+	  begin
+			i := 0;
+			while i < n do
+				begin put (c); i := i + 1 end
+		 end;
+
+	proc makenonnegative (var n : Integer) ~
+		if n < 0 then n := 0 - n else
+
+in
+	begin
+	getint (var n); geteol ();
+	while n \= 0 do
+		begin
+		putmany (' ', if n > 0 then mid else mid + n);
+		makenonnegative (var n);
+		putmany ('+', n);
+		puteol ();
+		getint (var n); geteol ()
+		end
+	end

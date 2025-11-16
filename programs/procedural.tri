@@ -1,0 +1,56 @@
+! test program proc.Æ
+let
+   const size   ~ 6;
+   type  String ~ array 6 of Char;
+
+  proc putstr (s: String) ~
+    let var i: Integer
+    in
+      begin
+      i := 0;
+      while i < size do
+        begin put (s[i]); i := i+1 end
+      end;
+
+   proc apply (proc p (var c : Char), var s : String) ~
+      let
+         var i : Integer
+      in
+         begin
+         i := 0;
+         while i < size do
+            begin
+            p (var s[i]);
+            i := i+1
+            end
+         end; !apply
+
+   proc shift (var l : Char) ~
+      let const ordl ~ ord (l)
+      in
+         if (ord('a') <= ordl)
+            /\ (ordl <= ord('z')) then
+            l := chr (ordl - ord('a') + ord('A'))
+         else
+            ; !skip
+
+   proc replaceall (old: Char, new: Char,
+                    var s: String) ~
+      let
+         proc zap (var c: Char) ~
+            if c = old then c := new else !skip
+      in
+         apply (proc zap, var s);
+
+   var name : String
+
+in
+   begin
+   apply (proc get, var name);
+   geteol ();
+   putstr (name); puteol ();
+   apply (proc shift, var name);
+   putstr (name); puteol ();
+   replaceall ('I', 'i', var name);
+   putstr (name); puteol ()
+   end

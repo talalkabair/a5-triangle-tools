@@ -1,0 +1,53 @@
+let
+ const maxlength ~ 15;
+ type String ~ array 16 of Char;
+ const null ~ chr(0);
+!Strings will be padded with nulls.
+
+ proc getstring (var s: String) ~
+  let var l: Integer
+  in
+   begin
+   l := 0;
+   while l < maxlength do
+    begin
+    if eol () then
+     s[l] := null
+    else
+     get (var s[l]);
+    l := l+1;
+    end;
+   s[maxlength] := null
+   end;
+
+ proc putstring (s: String) ~
+  let var i: Integer
+  in
+   begin
+   i := 0;
+   while s[i] \= null do
+    begin
+     put (s[i]);
+     i := i+1
+    end
+   end;
+
+ var you: String
+
+in
+ begin
+ putstring (
+  ['W','h','o',' ',
+   'a','r','e',' ', 
+   'y','o','u','?',
+   null,null,null,null]);
+ puteol ();
+ getstring (var you); geteol ();
+ putstring (
+  ['H','u','l','l',
+   'o',',',' ',null,
+   null,null,null,null,
+   null,null,null,null]);
+ putstring (you); put ('!');
+ puteol ()
+end

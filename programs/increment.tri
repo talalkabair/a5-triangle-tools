@@ -1,0 +1,14 @@
+! this won't compile without implementing the bonus material in Practical 3
+
+let
+    var a: Integer
+in
+begin
+    getint(var a);
+    a++;
+    putint(a);
+    puteol();
+    a++;
+    putint(a);
+    puteol();
+end

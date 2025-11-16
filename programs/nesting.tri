@@ -1,0 +1,31 @@
+let
+ var g: Integer;
+
+ proc P() ~
+  let
+   var p: Integer;
+
+			proc Q() ~
+    let
+     var q: Integer;
+     proc R() ~
+      let
+       var r: Integer
+      in
+       r := (g+p+q) * 1000   ! should cause overflow
+    in
+     begin q := g+p; R() end;
+
+   proc S() ~
+    let
+     var s: Integer
+    in
+     begin s := g+p+1; Q() end
+
+  in
+   begin p := g+1; S() end
+
+in
+ begin g := 1000; P() end
+
+        

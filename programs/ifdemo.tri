@@ -1,0 +1,9 @@
+let
+    var a : Integer;
+    var n : Integer
+in
+    begin
+        if a < 0 
+        then  n := 0
+        else  n := 1
+    end

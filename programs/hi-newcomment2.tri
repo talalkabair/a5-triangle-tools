@@ -1,0 +1,11 @@
+! this won't work until after some work in the practicals
+
+# new comment
+
+$
+another new comment
+$
+
+begin
+ put('H'); put('i'); put('!')
+end

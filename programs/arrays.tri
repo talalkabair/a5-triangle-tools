@@ -1,0 +1,47 @@
+let
+  type Vector ~ array 3 of Integer;
+  type Matrix ~ array 3 of Vector;
+
+  proc putvector (v: Vector) ~
+    let var i: Integer
+    in
+      begin
+      put ('['); putint (v[0]);
+      i := 1;
+      while i < 3 do
+        begin
+        put (' '); putint (v[i]);
+        i := i+1
+        end;
+      put (']')
+      end;
+
+  proc putmatrix (m: Matrix) ~
+    let var i: Integer
+    in
+      begin
+      i := 0;
+      while i < 3 do
+        begin
+        putvector (m[i]);
+        puteol ();
+        i := i+1
+        end
+      end;
+
+  func diagonal
+          (m: Matrix): Vector ~
+    [m[0][0], m[1][1], m[2][2]];
+
+  var me: Matrix
+    
+in
+  begin
+  me := [[1,2,3], [4,5,6], [7,8,9]];
+  putmatrix (me); puteol ();
+  putvector (diagonal (me));
+  puteol (); puteol ();
+  me[1] := [10,11,12];
+  me[1][1] := 22;
+  putmatrix (me); puteol ()
+  end

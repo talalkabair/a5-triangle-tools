@@ -1,0 +1,28 @@
+! Print powers of integers.
+
+let
+	func even (n : Integer) : Boolean ~
+		(n // 2) = 0;
+
+	func sqr (n : Integer) : Integer ~
+		n * n;
+
+	func power (b : Integer, n : Integer) : Integer ~
+		! assume n >= 0
+		if n = 0
+		then 1
+		else
+		if even (n)
+		then sqr (power (b, n/2))
+		else sqr (power (b, n/2)) * b;
+
+	var x : Integer;
+	var m : Integer
+in
+	begin
+	getint (var x); getint (var m);
+	putint (x); put ('^'); putint (m);  
+	put (' ');  put ('=');  put (' ');
+	putint (power (x, m));
+ puteol ()
+	end

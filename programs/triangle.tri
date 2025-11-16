@@ -1,0 +1,32 @@
+let
+
+ proc putmany (n: Integer, c: Char) ~
+  let
+   var i: Integer
+  in
+   begin
+   i := 0;
+   while i < n do
+    begin i := i+1; put (c) end
+   end;
+
+ var n: Integer;  var r: Integer;
+ const mark ~ '@'
+
+in
+ begin
+ getint (var n); geteol ();
+ r := 0;
+ while r < (n-1) do
+  begin
+  r := r + 1;
+  putmany (n-r, ' '); put (mark);
+  if r >= 2 then
+   begin
+   putmany (2*r - 3, ' '); put (mark)
+   end
+  else; !skip
+  puteol ()
+  end;
+ putmany (2*n - 1, mark)
+ end

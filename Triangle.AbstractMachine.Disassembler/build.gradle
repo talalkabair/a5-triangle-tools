@@ -1,0 +1,14 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+java {
+    sourceCompatibility = 21
+}
+
+dependencies {
+	implementation project(':Triangle.AbstractMachine')
+}
+
+application {
+	mainClass = 'Triangle.AbstractMachine.Disassembler'
+}

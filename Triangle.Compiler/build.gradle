@@ -1,0 +1,37 @@
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'jacoco'
+
+java {
+    sourceCompatibility = 21
+}
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+	implementation project(':Triangle.AbstractMachine')
+	testImplementation group: 'junit', name: 'junit', version: '4.13.2'
+}
+
+application {
+	mainClass = 'triangle.Compiler'
+}
+
+// Allow access to top-level programs folder when running
+run {
+    workingDir = rootDir
+}
+
+
+// allow access to programs for unit tests
+sourceSets.test.resources.srcDir file("$rootDir/programs")
+
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+}

@@ -1,0 +1,117 @@
+let
+ type Name   ~ array 6 of Char;
+ type Number ~ Integer;
+
+ proc prompt () ~
+  begin
+  put('N'); put('a'); put('m'); put('e');
+  put('?'); put(' ')
+  end;
+
+ proc getname (var newname: Name) ~
+  let var i: Integer
+  in
+   begin
+   i := 0;
+   while i < 6 do
+    begin
+     if eol () then
+      newname[i] := ' '
+     else
+      get (var newname[i]);
+     i := i+1
+    end
+   end;
+
+ proc putname (newname: Name) ~
+  let var i: Integer
+  in
+   begin
+   i := 0;
+   while i < 6 do
+    begin
+     put (newname[i]);
+     i := i+1
+    end
+   end;
+
+ type Entry     ~ record
+                   number: Number,
+                   name: Name
+                  end;
+ type Directory ~ record
+                   size: Integer,
+                   entry: array 100 of Entry
+                  end;
+
+ proc initialize (var dir: Directory) ~
+  dir.size := 0;
+
+ proc add (var dir: Directory,
+           newname: Name,
+           newnumber: Number) ~
+  begin
+   dir.entry[dir.size] :=
+    {number ~ newnumber, name ~ newname};
+   dir.size := dir.size + 1
+  end;
+
+ proc lookup (var dir: Directory,
+              oldname: Name,
+              var oldnumber: Number,
+              var found: Boolean) ~
+  let
+   var i: Integer;
+   var searching: Boolean
+  in
+   begin
+    i := 0; searching := true;
+    while (i < dir.size) /\ searching do
+     if dir.entry[i].name = oldname then
+      searching := false
+     else
+      i := i+1;
+    found := \searching;
+    if found then
+     oldnumber := dir.entry[i].number
+    else !skip
+   end;
+
+ var mydir: Directory
+
+in
+
+ begin
+  initialize (var mydir);
+  add (var mydir,
+   ['D','a','v','i','d',' '], 6041);
+  add (var mydir,
+   ['M','u','f','f','y',' '], 4969);
+  add (var mydir,
+   ['K','i','e','r','a','n'], 6042);
+  add (var mydir,
+   ['A','l','e','x','a',' '], 5322);
+   
+  let
+   const blank ~ [' ', ' ', ' ', ' ', ' ', ' '];
+   var name: Name;
+   var num: Number;
+   var ok: Boolean
+  in
+   begin
+    prompt ();
+   	getname (var name); geteol ();
+     while name \= blank do
+      begin
+       putname (name); put (' ');
+       lookup (var mydir, name, var num, var ok);
+       if ok then
+        putint (num)
+       else
+        put ('?');
+       puteol ();
+       prompt ();
+       getname (var name); geteol ()
+     end
+   end
+ end

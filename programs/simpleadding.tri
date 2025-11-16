@@ -1,0 +1,10 @@
+let
+    var a : Integer;
+    var b : Integer;
+    var c : Integer
+
+in
+    begin
+        a := 1; b := 2; c := a / b;
+    end
+

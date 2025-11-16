@@ -1,0 +1,16 @@
+let proc p1 () ~
+ let var c1: Char;
+     proc p2 () ~
+   let proc p3 () ~
+    let proc p4 () ~
+     let proc p5 () ~
+      let proc p6 () ~
+       let proc p7 () ~
+        put (c1)
+       in p7 ()
+      in p6 ()
+     in p5 ()
+    in p4 ()
+   in p3 ()
+ in begin c1 := '+'; p2 () end
+in p1 ()

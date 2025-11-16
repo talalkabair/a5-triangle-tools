@@ -1,0 +1,86 @@
+let
+  const max ~ 9999;
+  const invalid ~ 0-1;
+  type Money ~ Integer;  ! 0 .. max
+  type Trans ~ Char;     ! 'd' | 'w' | 'q'
+
+  func sum (m: Money, n: Money): Money ~
+    let const s ~ m + n
+    in
+       if s <= max then s else invalid;
+
+  func diff (m: Money, n: Money): Money ~
+    let const d ~ m - n
+    in
+       if 0 <= d then d else invalid;
+
+  proc gettrans (var code: Trans,
+                 var amount: Money) ~
+      begin
+      get(var code);
+      if code = 'q' then
+        ! skip
+      else
+       begin
+       getint(var amount);
+       if (0 > amount) \/ (amount > max) then
+        begin
+        amount := invalid; code := '?'
+        end
+       else if (code \= 'd') /\ (code \= 'w') then
+        code := '?'
+       else
+        ! ok
+       end;
+      geteol()
+      end;
+
+  proc processtrans (code: Trans,
+                     amount: Money,
+                     var balance: Money) ~
+      let
+        var newbalance: Money
+      in
+      begin
+      if code = 'd' then
+        begin
+        put('D'); put('e'); put('p'); put('o'); put('s'); 
+        put('i'); put('t'); put(' '); 
+        putint(amount); puteol();
+        newbalance := sum(balance, amount)
+        end
+      else if code = 'w' then
+        begin
+        put('W'); put('i'); put('t'); put('h'); put('d'); 
+        put('r'); put('a'); put('w'); put(' '); 
+        putint(amount); puteol();
+        newbalance := diff(balance, amount)
+        end
+      else
+        ; !skip
+      if (code = '?') \/ (newbalance = invalid) then
+        begin
+        put('I'); put('n'); put('v'); put('a'); put('l'); 
+        put('i'); put('d'); puteol()
+        end
+      else
+        balance := newbalance;
+      put('B'); put('a'); put('l'); put('a'); put('n'); 
+      put('c'); put('e'); put(' '); 
+      putint(balance); puteol();
+      end;
+
+  var balance:    Money;
+  var amount:     Money;
+  var trans:      Trans
+
+in
+  begin
+  balance := 0;
+  gettrans(var trans, var amount);
+  while trans \= 'q' do
+    begin
+    processtrans(trans, amount, var balance);
+    gettrans(var trans, var amount)
+    end
+  end

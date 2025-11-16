@@ -1,0 +1,19 @@
+! this won't work until after some work in the practicals
+let
+    var a : Integer;
+    var b : Integer
+
+in
+    begin
+        a := 1;
+        b := 2;
+        
+        putint(a);
+	puteol();
+        putint(b);
+        puteol();
+        putint(|a);
+        puteol();
+        putint(|b);
+        puteol()
+    end
