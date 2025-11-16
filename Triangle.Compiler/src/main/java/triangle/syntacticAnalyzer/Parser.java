@@ -84,15 +84,49 @@ public class Parser {
 		currentToken = lexicalAnalyser.scan();
 
 		try {
-			Command cAST = parseCommand();
+			Command cAST;
+			Declaration dAST = null;
+			SourcePosition pos = new SourcePosition();
+			start(pos);
+
+			// Allow top-level declarations before commands
+			if (currentToken.kind == Token.Kind.CONST ||
+					currentToken.kind == Token.Kind.VAR ||
+					currentToken.kind == Token.Kind.TYPE ||
+					currentToken.kind == Token.Kind.PROC ||
+					currentToken.kind == Token.Kind.FUNC) {
+
+				dAST = parseDeclaration();
+
+				// Optional semicolon after declaration
+				if (currentToken.kind == Token.Kind.SEMICOLON)
+					acceptIt();
+
+				// If next token begins a command, parse it
+				if (currentToken.kind != Token.Kind.EOT)
+					cAST = parseCommand();
+				else
+					cAST = new EmptyCommand(pos);
+
+				finish(pos);
+				cAST = new LetCommand(dAST, cAST, pos);
+			} else {
+				// Otherwise start with a normal command
+				cAST = parseCommand();
+			}
+
 			programAST = new Program(cAST, previousTokenPosition);
+
 			if (currentToken.kind != Token.Kind.EOT)
 				syntacticError("\"%\" not expected after end of program", currentToken.spelling);
+
 		} catch (SyntaxError s) {
 			return null;
 		}
+
 		return programAST;
 	}
+
 
 	// -------------------------------------------------------------------------
 	// COMMANDS
@@ -177,6 +211,15 @@ public class Parser {
 				Command body = parseSingleCommand();
 				finish(pos);
 				commandAST = new WhileCommand(cond, body, pos);
+				break;
+
+			case REPEAT:
+				acceptIt(); // consume 'repeat'
+				Command bodyCmd = parseCommand(); // body of loop
+				expect(Token.Kind.UNTIL); // consume 'until'
+				Expression untilExpr = parseExpression(); // condition
+				finish(pos);
+				commandAST = new RepeatCommand(bodyCmd, untilExpr, pos);
 				break;
 
 			case SEMICOLON:

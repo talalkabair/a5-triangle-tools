@@ -22,6 +22,7 @@ import triangle.ErrorReporter;
 import triangle.StdEnvironment;
 import triangle.abstractSyntaxTrees.AbstractSyntaxTree;
 import triangle.abstractSyntaxTrees.Program;
+import triangle.abstractSyntaxTrees.commands.RepeatCommand;
 import triangle.abstractSyntaxTrees.actuals.ConstActualParameter;
 import triangle.abstractSyntaxTrees.actuals.EmptyActualParameterSequence;
 import triangle.abstractSyntaxTrees.actuals.FuncActualParameter;
@@ -149,6 +150,23 @@ public final class Checker implements ActualParameterVisitor<FormalParameter, Vo
 	public Void visitEmptyCommand(EmptyCommand ast, Void arg) {
 		return null;
 	}
+
+	@Override
+	public Void visitRepeatCommand(RepeatCommand ast, Void o) {
+		if (ast.C != null) ast.C.visit(this, null);
+		if (ast.E != null) {
+			ast.E.visit(this, null);
+			if (!ast.E.type.equals(StdEnvironment.booleanType)) {
+				reporter.reportError(
+						"Boolean expression expected in repeat-until condition",
+						"",
+						ast.E.getPosition()
+				);
+			}
+		}
+		return null;
+	}
+
 
 	@Override
 	public Void visitIfCommand(IfCommand ast, Void arg) {

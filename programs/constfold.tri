@@ -1,0 +1,6 @@
+let
+  const x is 2;
+  const y is 3;
+  const z is x + y;
+in
+  z

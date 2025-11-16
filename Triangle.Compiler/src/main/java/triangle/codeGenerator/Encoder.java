@@ -26,6 +26,7 @@ import triangle.abstractMachine.Primitive;
 import triangle.abstractMachine.Register;
 import triangle.abstractSyntaxTrees.AbstractSyntaxTree;
 import triangle.abstractSyntaxTrees.Program;
+import triangle.abstractSyntaxTrees.commands.RepeatCommand;
 import triangle.abstractSyntaxTrees.actuals.ConstActualParameter;
 import triangle.abstractSyntaxTrees.actuals.EmptyActualParameterSequence;
 import triangle.abstractSyntaxTrees.actuals.FuncActualParameter;
@@ -132,6 +133,36 @@ public final class Encoder implements ActualParameterVisitor<Frame, Integer>,
 		encodeStore(ast.V, frame.expand(valSize), valSize);
 		return null;
 	}
+
+	@Override
+	public Void visitRepeatCommand(RepeatCommand ast, Frame frame) {
+		/*
+		 * Code generation for:
+		 * repeat
+		 *    <command>
+		 * until <expression>
+		 *
+		 * Logic:
+		 * 1. Mark the beginning of the loop.
+		 * 2. Execute the loop body.
+		 * 3. Evaluate the condition.
+		 * 4. If condition is false, jump back to the loop start.
+		 */
+
+		int loopStartAddr = emitter.getNextInstrAddr(); // mark loop start
+
+		// Execute loop body
+		ast.C.visit(this, frame);
+
+		// Evaluate condition (boolean expression)
+		ast.E.visit(this, frame);
+
+		// If condition is false → jump back to loop start
+		emitter.emit(OpCode.JUMPIF, Machine.falseRep, Register.CB, loopStartAddr);
+
+		return null;
+	}
+
 
 	@Override
 	public Void visitCallCommand(CallCommand ast, Frame frame) {

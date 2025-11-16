@@ -30,6 +30,7 @@ import triangle.abstractSyntaxTrees.actuals.SingleActualParameterSequence;
 import triangle.abstractSyntaxTrees.actuals.VarActualParameter;
 import triangle.abstractSyntaxTrees.aggregates.MultipleArrayAggregate;
 import triangle.abstractSyntaxTrees.aggregates.MultipleRecordAggregate;
+import triangle.abstractSyntaxTrees.commands.RepeatCommand;
 import triangle.abstractSyntaxTrees.aggregates.SingleArrayAggregate;
 import triangle.abstractSyntaxTrees.aggregates.SingleRecordAggregate;
 import triangle.abstractSyntaxTrees.commands.AssignCommand;
@@ -133,6 +134,16 @@ public class LayoutVisitor implements ActualParameterVisitor<Void, DrawingTree>,
 	public DrawingTree visitEmptyCommand(EmptyCommand ast, Void obj) {
 		return layoutNullary("EmptyCom.");
 	}
+
+	@Override
+	public DrawingTree visitRepeatCommand(RepeatCommand ast, Void o) {
+		return layoutBinary(
+				"Repeat Until",
+				ast.C.visit(this, null),
+				ast.E.visit(this, null)
+		);
+	}
+
 
 	@Override
 	public DrawingTree visitIfCommand(IfCommand ast, Void obj) {

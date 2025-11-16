@@ -1,22 +1,21 @@
-/*
+package triangle.syntacticAnalyzer;
+
+/**
  * Token.java – Clean Code Revision (2025, Student B)
  *
  * Purpose:
  *   Defines the Token class used by the Triangle compiler’s lexical analyzer.
  *   Each Token represents a lexical unit with type (Kind), spelling, and position.
  *
- * Improvements:
- *   • Clearer structure and modern commenting style
- *   • Readable enum formatting with logical grouping
- *   • Better documentation for maintainability
+ * Enhancements:
+ *   • Added REPEAT and UNTIL reserved keywords
+ *   • Clarified structure and improved readability
+ *   • Modernized documentation and naming
  *
  * Original source:
  *   (c) 1999–2003 D.A. Watt & D.F. Brown – University of Glasgow / RGU
  *   Updated (c) 2022–2025 Sandy Brownlee, University of Stirling
  */
-
-package triangle.syntacticAnalyzer;
-
 final class Token {
 
 	/** The category/type of this token (e.g. IDENTIFIER, IF, WHILE). */
@@ -28,13 +27,13 @@ final class Token {
 	/** The position (line/column range) of the token in the source file. */
 	protected SourcePosition position;
 
-	// ---------------------------------------------------------------------
+	// -------------------------------------------------------------------------
 	// Constructor
-	// ---------------------------------------------------------------------
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Constructs a Token with given kind, spelling, and position.
-	 * If it’s an IDENTIFIER, checks whether the spelling matches a reserved word.
+	 * Automatically resolves reserved words (e.g., "if", "repeat", "until").
 	 */
 	public Token(Kind kind, String spelling, SourcePosition position) {
 		this.kind = (kind == Kind.IDENTIFIER)
@@ -44,24 +43,24 @@ final class Token {
 		this.position = position;
 	}
 
-	// ---------------------------------------------------------------------
+	// -------------------------------------------------------------------------
 	// Utilities
-	// ---------------------------------------------------------------------
+	// -------------------------------------------------------------------------
 
-	/** Returns the spelling of a token kind (e.g. "if" or ":="). */
+	/** Returns the spelling associated with a token kind (e.g., "if" or ":="). */
 	public static String spell(Kind kind) {
 		return kind.spelling;
 	}
 
-	/** Returns a readable string representation for debugging. */
+	/** Returns a readable string representation for debugging or logging. */
 	@Override
 	public String toString() {
 		return "Kind=" + kind + ", spelling=" + spelling + ", position=" + position;
 	}
 
-	// ---------------------------------------------------------------------
-	// Enum of token kinds
-	// ---------------------------------------------------------------------
+	// -------------------------------------------------------------------------
+	// Enum of Token Kinds
+	// -------------------------------------------------------------------------
 
 	public enum Kind {
 
@@ -71,11 +70,11 @@ final class Token {
 		IDENTIFIER("<identifier>"),
 		OPERATOR("<operator>"),
 
-		// --- Reserved words (alphabetical for clarity) ---
+		// --- Reserved words (alphabetical order for maintainability) ---
 		ARRAY("array"), BEGIN("begin"), CONST("const"), DO("do"), ELSE("else"),
 		END("end"), FUNC("func"), IF("if"), IN("in"), LET("let"), OF("of"),
-		PROC("proc"), RECORD("record"), THEN("then"), TYPE("type"),
-		VAR("var"), WHILE("while"),
+		PROC("proc"), RECORD("record"), REPEAT("repeat"), THEN("then"),
+		TYPE("type"), UNTIL("until"), VAR("var"), WHILE("while"),
 
 		// --- Punctuation ---
 		DOT("."), COLON(":"), SEMICOLON(";"), COMMA(","), BECOMES(":="), IS("~"),
@@ -95,13 +94,13 @@ final class Token {
 			this.spelling = spelling;
 		}
 
-		// -----------------------------------------------------------------
+		// ---------------------------------------------------------------------
 		// Reserved-word lookup
-		// -----------------------------------------------------------------
+		// ---------------------------------------------------------------------
 
 		/**
 		 * Checks whether a given spelling corresponds to a reserved word.
-		 * If it does, returns that Kind; otherwise returns IDENTIFIER.
+		 * Returns the correct Kind if found, otherwise IDENTIFIER.
 		 */
 		public static Kind fromSpelling(String spelling) {
 			boolean insideReserved = false;
@@ -119,7 +118,8 @@ final class Token {
 			return IDENTIFIER;
 		}
 
+		/** Defines the start and end of the reserved word range. */
 		private static final Kind firstReservedWord = ARRAY;
-		private static final Kind lastReservedWord  = WHILE;
+		private static final Kind lastReservedWord  = UNTIL;
 	}
 }
